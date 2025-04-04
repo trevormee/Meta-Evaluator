@@ -1,7 +1,7 @@
 #lang racket/base
 
 #|
-    File Name: main.scm
+    File Name: meta-evaluator.scm
     Author: Trevor Mee
     COP4020 Project 3
     Date: 04/11/2025
@@ -84,7 +84,7 @@
                     ((eq? op '*) (* (evalu8 (cadr exp) env) (evalu8 (caddr exp) env)))           ; multiplication operation
                     ((eq? op 'equal?) (eq? (evalu8 (cadr exp) env) (evalu8 (caddr exp) env)))    ; "equal to" operation
                     ((eq? op 'less?) (< (evalu8 (cadr exp) env) (evalu8 (caddr exp) env)))       ; "less than" operation
-                    ((eq? op '/) (/ (evalu8 (cadr exp) env) (evalu8 (caddr exp) env)))           ; division
+                    ((eq? op '/) (/ (evalu8 (cadr exp) env) (evalu8 (caddr exp) env)))           ; division operation
                     
                     ; Handle user-defined function calls
                     ((symbol? op)
@@ -116,14 +116,26 @@
 ; Define a binding enviroment
 (define env '((a . 12)(b . 5.2)(foo . (lambda (x y) (/ ( + x y) 2)))))
 
-; Test cases
+; Working test cases
+(display "working test cases:")
+(newline)
 (display (evalu8 '(+ a 5) env))         ; expect 17
 (newline)
 (display (evalu8 '(* (+ a 5) 3) env))   ; expect 51
-(newline)
-;(display (evalu8 '(* (+ a 5) c) env))   ; expect "Error: C is not bound"
 (newline)
 (display (evalu8 '(foo 5 9) env))       ; expect 7
 (newline)
 (display (evalu8 '((lambda (x y) (* x (+ x y))) 2 3) env))  ; expect 10
 (newline)
+
+; Error test cases
+(display "error test cases (must uncomment first):")
+(newline)
+; (display (evalu8 '(* (+ a 5) c) env))   ; expect "Error: C is not bound"
+; (newline)
+; (display ((evalu8 '(lambda (x) (+ a x)) '((a . 5))) 3)) ; expect "Error: lambda is not bound"
+; (newline)
+; (display (evalu8 '(fakeFunciton 5) env)) ; expect "Error: fakeFunciton is not bound"
+; (newline)
+; (display (evalu8 '(> a 5) env))         ; expect "Error: > is not bound"
+; (newline)
